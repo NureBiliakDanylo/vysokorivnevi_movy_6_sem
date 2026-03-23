@@ -15,8 +15,16 @@ def calculate_average(a, b, c):
 
 #3. Обчислення віку
 def calculate_age(birth_year):
-    current_year = datetime.datetime.now().year
-    return current_year - birth_year
+    current_year = datetime.datetime.now().date()
+    year = current_year.year - birth_year.year
+    month1 = current_year.month
+    month2 = birth_year.month
+    if(month1 < month2):
+        return year - 1
+    elif(month1 == month2 and current_year.day < birth_year.day):
+        return year - 1
+    else:
+        return year
 
 
 #4. Клас Книга
@@ -53,7 +61,7 @@ def main():
     # Демонстрація 3
     print("Обчислення віку")
     try:
-        birth_year = int(input("Введіть ваш рік народження (наприклад, 1990): "))
+        birth_year = datetime.datetime.strptime(input("Введіть ваш рік народження (наприклад, 1990): "), "%d.%m.%Y").date()
         age = calculate_age(birth_year)
         if age < 0 or age > 150:
             print("Введено некоректний рік народження.")
