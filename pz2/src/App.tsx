@@ -90,7 +90,7 @@ const JsonParser: React.FC = () => {
       <h2>2. Парсер JSON</h2>
       <textarea
         value={input}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={(e) => {setInput(e.target.value); handleParse()}}
         rows={6}
         style={{ width: '100%', marginBottom: '10px', padding: '10px', fontFamily: 'monospace' }}
         placeholder="Введіть JSON тут..."
