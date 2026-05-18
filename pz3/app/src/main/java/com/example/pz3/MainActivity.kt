@@ -13,9 +13,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -24,14 +29,43 @@ import java.io.File
 import java.io.OutputStream
 import kotlin.math.pow
 
+sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
+    object Calculator : Screen("calculator", "Calc", Icons.Default.Build)
+    object Movies : Screen("movies", "Movies", Icons.Default.List)
+    object Fitness : Screen("fitness", "Fitness", Icons.Default.Star)
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Pz3Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CalculatorScreen(Modifier.padding(innerPadding))
+                var currentScreen by remember { mutableStateOf<Screen>(Screen.Calculator) }
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        NavigationBar {
+                            val items = listOf(Screen.Calculator, Screen.Movies, Screen.Fitness)
+                            items.forEach { screen ->
+                                NavigationBarItem(
+                                    icon = { Icon(screen.icon, contentDescription = screen.title) },
+                                    label = { Text(screen.title) },
+                                    selected = currentScreen == screen,
+                                    onClick = { currentScreen = screen }
+                                )
+                            }
+                        }
+                    }
+                ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        when (currentScreen) {
+                            Screen.Calculator -> CalculatorScreen()
+                            Screen.Movies -> MovieScreen()
+                            Screen.Fitness -> FitnessScreen()
+                        }
+                    }
                 }
             }
         }
