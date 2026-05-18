@@ -45,6 +45,6 @@ object RomanConverter {
                 i++
             }
         }
-        return if (toRoman(res) == s) res else null // Basic validation
+        return if (toRoman(res) == s) res else null
     }
 }

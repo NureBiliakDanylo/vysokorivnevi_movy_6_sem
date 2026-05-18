@@ -200,7 +200,6 @@ fun saveToUri(context: android.content.Context, uri: android.net.Uri, content: S
             outputStream.write(content.toByteArray())
         }
     } catch (e: Exception) {
-        // Handle error
     }
 }
 
